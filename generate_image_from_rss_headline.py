@@ -3,18 +3,18 @@ import feedparser
 import os
 import requests
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables from .env file
 load_dotenv()
 
+
+client = OpenAI()
+
 # Fetch the OpenAI API key from the environment
 openai_api_key = os.getenv("OPENAI_API_KEY")
-
 if not openai_api_key:
     raise ValueError("Please set the OPENAI_API_KEY in your .env file.")
-
-# Set the OpenAI API key
-openai.api_key = openai_api_key
 
 def generate_image_from_rss_headline(rss_url):
     # Parse the RSS feed
@@ -36,14 +36,16 @@ def generate_image_from_rss_headline(rss_url):
     prompt = f"Generate an image based on the news article titled: '{title}'. The content begins with: '{first_paragraph} {second_paragraph}'."
 
     # Call the OpenAI DALL·E API to generate an image
-    response = openai.Image.create(
+    response = client.images.generate(
+        model="dall-e-3",
         prompt=prompt,
         n=1,
-        size="1024x1024"
+        size="1024x1024",
+        quality="standard"
     )
 
     # Get the URL of the generated image
-    image_url = response['data'][0]['url']
+    image_url = response.data[0].url
     return image_url
 
 def download_image(image_url, filename):
