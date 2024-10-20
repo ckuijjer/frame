@@ -1,5 +1,11 @@
 # frame
 
+## Pre-requisites
+
+```
+sudo apt install libopenblas-dev fonts-roboto
+```
+
 ## Installation
 
 ```

@@ -33,15 +33,12 @@ def fetch_rss_feed(rss_url):
 
 def generate_image_from_summary(title, summary):
     """Generate an image using OpenAI's DALL·E API based on the title and summary."""
-    # Get the first two paragraphs from the summary
     paragraphs = summary.split('</p>')
     first_paragraph = paragraphs[0] if len(paragraphs) > 0 else ''
     second_paragraph = paragraphs[1] if len(paragraphs) > 1 else ''
     
-    # Combine title and paragraphs to create a prompt
     prompt = f"Generate an image based on the news article titled: '{title}'. The content begins with: '{first_paragraph} {second_paragraph}'."
 
-    # Call the OpenAI DALL·E API to generate an image
     response = client.images.generate(
         model="dall-e-3",
         prompt=prompt,
@@ -50,7 +47,6 @@ def generate_image_from_summary(title, summary):
         quality="standard"
     )
 
-    # Get the URL of the generated image
     image_url = response.data[0].url
     return image_url
 
@@ -94,14 +90,17 @@ def wrap_text(draw, text, font, max_width):
     lines.append(current_line)
     return lines
 
-def add_title_to_image(input_path, output_path, text, max_width, max_height, padding, font_path=None):
+def add_title_to_image(input_path, output_path, text, target_size, padding):
     """Superimpose left-aligned text with black outline on the image."""
     try:
         with Image.open(input_path) as img:
             draw = ImageDraw.Draw(img)
 
-            padded_max_width = max_width - 2 * padding
-            padded_max_height = max_height - 2 * padding
+            max_width = target_size[0] - 2 * padding
+            max_height = target_size[1] // 4 - 2 * padding
+
+            # Get the font path based on the operating system
+            font_path = get_font_path()
 
             if font_path:
                 font = ImageFont.truetype(font_path, 50)
@@ -112,7 +111,7 @@ def add_title_to_image(input_path, output_path, text, max_width, max_height, pad
             preferred_lines = 3
             while True:
                 font = ImageFont.truetype(font_path or "arial.ttf", font_size)
-                lines = wrap_text(draw, text, font, padded_max_width)
+                lines = wrap_text(draw, text, font, max_width)
 
                 if len(lines) > preferred_lines:
                     font_size -= 2
@@ -120,7 +119,7 @@ def add_title_to_image(input_path, output_path, text, max_width, max_height, pad
                     line_height = font.getbbox("hg")[3]
                     total_text_height = line_height * len(lines)
 
-                    if total_text_height <= padded_max_height:
+                    if total_text_height <= max_height:
                         break
                     else:
                         font_size -= 2
@@ -161,15 +160,20 @@ def get_font_path():
     else:
         return None
 
-# # Example usage:
+def get_filename(title):
+    """Generate a filename based on the current date and the article title."""
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    snake_case_title = snake_case(title)
+    return f"{current_date}_{snake_case_title}.png"
+
+# Example usage:
 rss_url = 'https://feeds.nos.nl/nosnieuwsalgemeen'
 title, summary = fetch_rss_feed(rss_url)
 image_url = generate_image_from_summary(title, summary)
 print("Generated Image URL:", image_url)
 
-current_date = datetime.now().strftime("%Y-%m-%d")
-snake_case_title = snake_case(title)
-filename = f"{current_date}_{snake_case_title}.png"
+# Generate the filename
+filename = get_filename(title)
 
 # Download the image locally
 download_image(image_url, filename)
@@ -181,5 +185,4 @@ resize_and_crop_image(filename, resized_filename, target_size)
 
 # Superimpose the title on the resized image
 output_filename_with_text = f"with_text_{resized_filename}"
-font_path = get_font_path()
-add_title_to_image(resized_filename, output_filename_with_text, title, max_width=800, max_height=120, padding=20, font_path=font_path)
+add_title_to_image(resized_filename, output_filename_with_text, title, target_size, padding=20)
