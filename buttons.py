@@ -21,15 +21,7 @@ GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # It receives one argument: the associated input pin.
 def handle_button(pin):
     label = LABELS[BUTTONS.index(pin)]
-    if str(label) == 'A':
-      subprocess.run(["inkywrite", "/home/pi/Pictures/A.png"])
-    elif str(label) == 'B':
-      subprocess.run(["inkywrite", "/home/pi/Pictures/B.png"])
-    elif str(label) == 'C':
-      subprocess.run(["inkywrite", "/home/pi/Pictures/C.png"])
-    elif str(label) == 'D':
-      subprocess.run(["inkywrite", "/home/pi/Pictures/D.png"])
-      return
+    print(f"Button {label} pressed ${pin}")
 
 # Loop through out buttons and attach the "handle_button" function to each
 # We're watching the "FALLING" edge (transition from 3.3V to Ground) and
