@@ -25,9 +25,9 @@ def main():
         print(f"Generated Image URL: {image_url}")
         download_image(image_url, filename)
 
-    # Generate the resized and text-enhanced filenames
-    resized_filename = get_filename(title, prefix="resized_")
-    output_filename_with_text = get_filename(title, prefix="with_text_resized_")
+    # Generate the resized and text-enhanced filenames with suffixes
+    resized_filename = get_filename(title, suffix="_resized")
+    output_filename_with_text = get_filename(title, suffix="_with_text_resized")
 
     # Resize the image
     resize_and_crop_image(filename, resized_filename, DEFAULT_IMAGE_SIZE)
