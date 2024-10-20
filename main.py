@@ -1,5 +1,8 @@
 from rss_feed import fetch_rss_feed
-from image_processing import resize_and_crop_image, add_title_to_image, generate_image_from_summary, download_image
+from image_generation import generate_image_from_summary
+from image_io import download_image
+from image_processing import resize_and_crop_image
+from text_processing import add_title_to_image
 from utils import get_filename
 from config import DEFAULT_IMAGE_SIZE, PADDING
 
