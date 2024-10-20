@@ -7,10 +7,10 @@ from openai import OpenAI
 import re
 from datetime import datetime
 from PIL import ImageFont, ImageDraw, Image, ImageOps
+import platform
 
 # Load environment variables from .env file
 load_dotenv()
-
 
 client = OpenAI()
 
@@ -82,9 +82,6 @@ def resize_and_crop_image(input_path, output_path, target_size):
     except Exception as e:
         print(f"Error resizing and cropping image: {e}")
 
-
-
-
 def wrap_text(draw, text, font, max_width):
     """Wrap text to fit within the specified width, considering font size."""
     lines = []
@@ -146,7 +143,7 @@ def add_dynamic_text_with_padding_left_aligned(input_path, output_path, text, ma
                         font_size -= 2
 
                 # If font size becomes too small, try reducing the preferred lines (from 3 to 2, then 1)
-                if font_size < 10:  # Arbitrary lower limit on font size
+                if font_size < 30:  # Arbitrary lower limit on font size
                     if preferred_lines > 1:
                         preferred_lines -= 1
                         font_size = 50  # Reset font size and try again
@@ -174,6 +171,17 @@ def add_dynamic_text_with_padding_left_aligned(input_path, output_path, text, ma
     except Exception as e:
         print(f"Error adding text to image: {e}")
 
+def get_font_path():
+    """Get the path to the Roboto font based on the operating system."""
+    system = platform.system()
+    if system == "Darwin":
+        return "~/Library/Fonts/Roboto-Regular.ttf"
+    elif system == "Linux":
+        return "/usr/share/fonts/truetype/roboto/unhinted/RobotoTTF/Roboto-Regular.ttf"
+    elif system == "Windows":
+        return "C:/Windows/Fonts/Roboto-Regular.ttf"
+    else:
+        return None
 
 
 # # Example usage:
@@ -203,15 +211,8 @@ resize_and_crop_image(filename, resized_filename, target_size)
 output_filename_with_text = f"with_text_{resized_filename}"
 article_title = title  # You already fetched the title in the previous step
 
-# resized_filename=f"resized_2024-10-19_bewoner_van_ontploft_huis_meppel_opgepakt.png"
-# output_filename_with_text = f"with_text_resized_2024-10-19_bewoner_van_ontploft_huis_meppel_opgepakt.png"
-# article_title = f"Bewoner van ontploft huis Meppel opgepakt"  # You already fetched the title in the previous step
-
 # Ensure the text takes up the full width (800px) and max height (120px)
 padding = 20
 
-# sudo apt-get install fonts-roboto
-# font_path=/usr/share/fonts/truetype/roboto/Roboto-Regular.ttf
-
-font_path="~/Library/Fonts/Roboto-Regular.ttf"
+font_path=get_font_path()
 add_dynamic_text_with_padding_left_aligned(resized_filename, output_filename_with_text, article_title, max_width=800, max_height=120, padding=padding,font_path=font_path)
