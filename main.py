@@ -14,7 +14,8 @@ def main():
     image_url = generate_image_from_summary(title, summary)
     print(f"Generated Image URL: {image_url}")
 
-    filename = get_filename(title)
+    # Save images in the images/ subdirectory
+    filename = get_filename(title)  # Uses the images/ directory by default
     download_image(image_url, filename)
 
     resized_filename = f"resized_{filename}"
