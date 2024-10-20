@@ -129,3 +129,7 @@ frame/
 ## **License**
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## **Acknowledgements**
+
+With help from ChatGPT, see the [ChatGPT conversation](https://chatgpt.com/share/67150e7c-3528-800e-b2a2-3108734eea47) for more information.
