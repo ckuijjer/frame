@@ -8,9 +8,7 @@ from display_on_inky import display_image_on_inky
 from utils import get_filename
 from config import DEFAULT_IMAGE_SIZE, PADDING
 
-def render_news_to_display():
-    provider = "getimg"  # Change to "getimg" to switch to getimg.ai
-
+def render_news_to_display(provider="getimg"):
     rss_url = 'https://feeds.nos.nl/nosnieuwsalgemeen'
     title, summary = fetch_rss_feed(rss_url)
     print(f"Fetched article: {title}")
@@ -39,3 +37,6 @@ def render_news_to_display():
 
     # Display the image on the Inky Impression (or print a message if not on Linux)
     display_image_on_inky(output_filename_with_text)
+
+if __name__ == "__main__":
+    render_news_to_display()

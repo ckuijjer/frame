@@ -1,6 +1,6 @@
 import openai
 import requests
-from config import OPENAI_API_KEY, GETIMG_API_KEY
+from config import OPENAI_API_KEY, GETIMG_API_KEY, DEFAULT_IMAGE_SIZE
 
 # Set the OpenAI API key
 openai.api_key = OPENAI_API_KEY
@@ -47,8 +47,8 @@ def generate_image_from_getimg(prompt: str) -> str:
     payload = {
         "model": "stable-diffusion-xl-v1-0",
         "prompt": prompt,
-        "width": 800,
-        "height": 480,
+        "width": DEFAULT_IMAGE_SIZE[0],
+        "height": DEFAULT_IMAGE_SIZE[1],
         "steps": 30,
         "response_format": "url"
     }
