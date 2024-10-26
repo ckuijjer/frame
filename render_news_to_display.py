@@ -1,10 +1,10 @@
 import os
-from rss_feed import fetch_rss_feed
-from image_generation import generate_image
-from image_io import download_image
-from image_processing import resize_and_crop_image
+from fetch_rss_feed import fetch_rss_feed
+from generate_image import generate_image
+from download_image import download_image
+from resize_and_crop_image import resize_and_crop_image
 from text_processing import add_title_to_image
-from display_on_inky import display_image_on_inky
+from display_image_on_inky import display_image_on_inky
 from utils import get_filename
 from config import DEFAULT_IMAGE_SIZE, PADDING
 

@@ -1,5 +1,6 @@
-from bottle import Bottle, static_file, run, response
+from bottle import Bottle, static_file, run, response, request
 from render_news_to_display import render_news_to_display
+from render_image_on_display import render_image_on_display
 
 app = Bottle()
 
@@ -18,13 +19,36 @@ def serve_static(filename):
 # API endpoint to trigger rendering of news to display
 @app.route('/api/render', method='POST')
 def api_render():
+    data = request.json
+    provider = data.get('provider', 'getimg')  # Default to 'getimg' if not specified
     try:
-        render_news_to_display()  # Call the function to render and display the news
+        render_news_to_display(provider=provider)  # Pass provider to render function
         response.content_type = 'application/json'
         return {"status": "success", "message": "Image rendered and displayed."}
     except Exception as e:
         response.status = 500
         return {"status": "error", "message": str(e)}
+
+
+@app.route('/api/upload', method='POST')
+def api_upload():
+    upload = request.files.get('file')
+    if not upload:
+        response.status = 400
+        return {"status": "error", "message": "No file uploaded."}
+    
+    try:
+        file_path = f"./images/{upload.filename}"
+        upload.save(file_path)  # Save the file
+
+        # Display the uploaded image on the Inky display
+        render_image_on_display(file_path)
+        return {"status": "success", "message": "Image uploaded and displayed on Inky."}
+    except Exception as e:
+        response.status = 500
+        return {"status": "error", "message": str(e)}
+
+
 
 if __name__ == '__main__':
     run(app, host='localhost', port=8080)
