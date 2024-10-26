@@ -1,6 +1,6 @@
 import os
 from rss_feed import fetch_rss_feed
-from image_generation import generate_image_from_summary
+from image_generation import generate_image
 from image_io import download_image
 from image_processing import resize_and_crop_image
 from text_processing import add_title_to_image
@@ -9,6 +9,8 @@ from utils import get_filename
 from config import DEFAULT_IMAGE_SIZE, PADDING
 
 def main():
+    provider = "getimg"  # Change to "getimg" to switch to getimg.ai
+
     rss_url = 'https://feeds.nos.nl/nosnieuwsalgemeen'
     title, summary = fetch_rss_feed(rss_url)
     print(f"Fetched article: {title}")
@@ -21,7 +23,7 @@ def main():
         print(f"Image already exists: {filename}")
     else:
         # Generate the image if it doesn't already exist
-        image_url = generate_image_from_summary(title, summary)
+        image_url = generate_image(title, summary, provider=provider)
         print(f"Generated Image URL: {image_url}")
         download_image(image_url, filename)
 

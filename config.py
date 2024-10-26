@@ -6,6 +6,7 @@ load_dotenv()
 
 # API Key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GETIMG_API_KEY = os.getenv("GETIMG_API_KEY")
 
 # Default Image Size
 DEFAULT_IMAGE_SIZE = (800, 480)
