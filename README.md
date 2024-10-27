@@ -29,8 +29,8 @@ sudo apt install libopenblas-dev fonts-roboto nodejs npm
 
 - **libopenblas-dev**: Required for numerical computations by libraries like NumPy.
 - **fonts-roboto**: Required for adding text in the Roboto font to images.
-- **nodejs**: Required for running the React app.
-- **pnpm**: Package manager for the React app.
+- **nodejs**: Required for running the frontend React app.
+- **npm**: Node.js package manager.
 
 ## **Installation**
 
@@ -179,3 +179,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## **Acknowledgements**
 
 With help from ChatGPT, see the [ChatGPT conversation](https://chatgpt.com/share/67150e7c-3528-800e-b2a2-3108734eea47) for more information.
+
+```
+
+```
