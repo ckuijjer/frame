@@ -24,32 +24,13 @@ Make sure your system meets the following requirements:
 On your Raspberry Pi (or Linux machine), install the required system packages:
 
 ```bash
-sudo apt install libopenblas-dev fonts-roboto
+sudo apt install libopenblas-dev fonts-roboto nodejs npm
 ```
 
 - **libopenblas-dev**: Required for numerical computations by libraries like NumPy.
 - **fonts-roboto**: Required for adding text in the Roboto font to images.
-
-```
-
-```
-
-### Deno
-
-Deno is used to build the frontend. You can install Deno using the following command (as there's no armv7 binary, you'll need to build it from source):
-
-### Install Rust
-
-```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-```
-
-### Install Deno
-
-```
-cargo install deno
-```
+- **nodejs**: Required for running the frontend React app.
+- **npm**: Node.js package manager.
 
 ## **Installation**
 
