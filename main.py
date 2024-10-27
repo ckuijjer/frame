@@ -39,7 +39,7 @@ def api_upload():
     
     try:
         file_path = f"./images/{upload.filename}"
-        upload.save(file_path)  # Save the file
+        upload.save(file_path, overwrite=True)  # Save the file and overwrite if it exists
 
         # Display the uploaded image on the Inky display
         render_image_on_display(file_path)

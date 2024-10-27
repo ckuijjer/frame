@@ -13,7 +13,7 @@ def resize_and_crop_image(input_path: str, output_path: str, target_size: Tuple[
     try:
         with Image.open(input_path) as img:
             img = ImageOps.fit(img, target_size, Image.LANCZOS, centering=(0.5, 0.5))
-            img.save(output_path)
+            img.save(output_path, overwrite=True)
             print(f"Image successfully resized and cropped to: {output_path}")
     except Exception as e:
         print(f"Error resizing and cropping image: {e}")
