@@ -24,11 +24,13 @@ Make sure your system meets the following requirements:
 On your Raspberry Pi (or Linux machine), install the required system packages:
 
 ```bash
-sudo apt install libopenblas-dev fonts-roboto
+sudo apt install libopenblas-dev fonts-roboto nodejs npm
 ```
 
 - **libopenblas-dev**: Required for numerical computations by libraries like NumPy.
 - **fonts-roboto**: Required for adding text in the Roboto font to images.
+- **nodejs**: Required for running the React app.
+- **pnpm**: Package manager for the React app.
 
 ## **Installation**
 
@@ -69,6 +71,7 @@ sudo apt install libopenblas-dev fonts-roboto
 
    ```bash
    cd web
+   sudo npm install -g pnpm
    pnpm install
    ```
 
@@ -77,6 +80,23 @@ sudo apt install libopenblas-dev fonts-roboto
    ```bash
    pnpm build
    ```
+
+Or as a all in once command:
+
+```bash
+git clone https://github.com/ckuijjer/frame.git
+cd frame
+python -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+touch .env
+cd web
+npm install -g pnpm
+pnpm install
+pnpm build
+```
+
+Just remember to add your API keys to the `.env` file.
 
 ## **Configuration**
 
