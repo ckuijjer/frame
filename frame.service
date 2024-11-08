@@ -1,0 +1,12 @@
+[Unit]
+Description=Frame Webserver
+After=network.target
+
+[Service]
+ExecStart=/home/ckuijjer/src/frame/env/bin/python /home/ckuijjer/src/frame/main.py
+WorkingDirectory=/home/ckuijjer/src/frame
+Restart=always
+User=ckuijjer
+
+[Install]
+WantedBy=multi-user.target

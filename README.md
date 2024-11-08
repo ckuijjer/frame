@@ -126,6 +126,16 @@ To run the web server and display the React app, run the following commands:
 python main.py
 ```
 
+## Install as a service
+
+```bash
+sudo cp frame.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable frame
+sudo systemctl start frame
+sudo systemctl status frame
+```
+
 ### **How It Works**
 
 1. **Fetch RSS Feed**: The script fetches the latest headlines from the configured RSS feed (currently configured for NOS news).
