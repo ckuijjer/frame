@@ -1,7 +1,7 @@
 from bottle import Bottle, static_file, run, response, request
 from render_news_to_display import render_news_to_display
 from render_image_on_display import render_image_on_display
-from render_overscan import render_, render_overscan_frame, render_overscan_grid
+from render_overscan import render_overscan_frame, render_overscan_grid
 
 app = Bottle()
 
