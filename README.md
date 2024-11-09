@@ -91,7 +91,7 @@ source env/bin/activate
 pip install -r requirements.txt
 touch .env
 cd web
-npm install -g pnpm
+sudo npm install -g pnpm
 pnpm install
 pnpm build
 ```
