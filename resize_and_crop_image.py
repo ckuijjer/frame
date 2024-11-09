@@ -2,7 +2,7 @@ from PIL import Image, ImageOps
 from typing import Tuple
 from config import DEFAULT_IMAGE_SIZE, OVERSCAN_TOP, OVERSCAN_RIGHT, OVERSCAN_BOTTOM, OVERSCAN_LEFT
 
-def resize_and_crop_image(input_path: str, output_path: str, target_size: Tuple[int, int]):
+def resize_and_crop_image(input_path: str, output_path: str):
     """
     Resize and crop an image to fit the target size while maintaining aspect ratio.
     
@@ -25,8 +25,7 @@ def resize_and_crop_image(input_path: str, output_path: str, target_size: Tuple[
             paste_position = (OVERSCAN_LEFT, OVERSCAN_TOP)
             background.paste(img, paste_position)
 
-            # background.save(output_path, overwrite=True)
-            img.save(output_path, overwrite=True)
+            background.save(output_path, overwrite=True)
             print(f"Image successfully resized and cropped to: {output_path}")
     except Exception as e:
         print(f"Error resizing and cropping image: {e}")
