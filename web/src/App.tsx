@@ -7,6 +7,11 @@ function App() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
+  const [top, setTop] = useState('');
+  const [left, setLeft] = useState('');
+  const [bottom, setBottom] = useState('');
+  const [right, setRight] = useState('');
+
   const generateImage = async () => {
     try {
       const response = await fetch('/api/render', {
@@ -49,6 +54,36 @@ function App() {
     }
   };
 
+  const renderOverscanGrid = async () => {
+    try {
+      const response = await fetch('/api/render_overscan_grid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+      const result = await response.json();
+      console.log(result.message);
+    } catch (error) {
+      console.error('Error generating image:', error);
+    }
+  };
+
+  const renderOverscanFrame = async () => {
+    event.preventDefault(); // Prevent default form behavior
+
+    try {
+      const response = await fetch('/api/render_overscan_grid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ top, left, bottom, right }),
+      });
+      const result = await response.json();
+      console.log(result.message);
+    } catch (error) {
+      console.error('Error generating image:', error);
+    }
+  };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     disabled: isUploading,
@@ -62,8 +97,9 @@ function App() {
         displays them on an Inky e-ink display
       </h2>
 
-      <div className="flex items-center justify-center space-x-8">
-        <div className="bg-white p-8 rounded shadow-md w-96 text-center min-h-[200px]">
+      {/* <div className="flex items-center justify-center space-x-8"> */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="bg-white p-8 rounded shadow-md  text-center min-h-[200px]">
           <div className="flex flex-col items-center mb-4">
             <label className="mb-2">
               <input
@@ -88,13 +124,13 @@ function App() {
           </div>
           <button
             onClick={generateImage}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="px-4 py-2 bg-blue-500 text-white rounded w-full"
           >
             Generate Image
           </button>
         </div>
 
-        <div className="bg-white p-8 rounded shadow-md w-96 text-center min-h-[200px] flex flex-col">
+        <div className="bg-white p-8 rounded shadow-md  text-center min-h-[200px] flex flex-col">
           <div
             {...getRootProps()}
             className={`border-2 border-dashed p-8 rounded cursor-pointer flex-1 flex items-center justify-center ${
@@ -120,6 +156,50 @@ function App() {
               ></div>
             </div>
           )}
+        </div>
+
+        <div className="bg-white p-8 rounded shadow-md  text-center min-h-[200px]">
+          <button
+            onClick={renderOverscanGrid}
+            className="px-4 py-2 bg-blue-500 text-white rounded w-full mb-12"
+          >
+            Render Overscan Grid
+          </button>
+          <form onSubmit={renderOverscanFrame} className="space-y-4 ">
+            <div className="grid grid-cols-1 gap-4">
+              <input
+                type="number"
+                placeholder="Top"
+                value={top}
+                onChange={(e) => setTop(e.target.value)}
+                className="p-2 border border-gray-300 rounded"
+              />
+              <input
+                type="number"
+                placeholder="Right"
+                value={right}
+                onChange={(e) => setRight(e.target.value)}
+                className="p-2 border border-gray-300 rounded"
+              />
+              <input
+                type="number"
+                placeholder="Bottom"
+                value={bottom}
+                onChange={(e) => setBottom(e.target.value)}
+                className="p-2 border border-gray-300 rounded"
+              />
+              <input
+                type="number"
+                placeholder="Left"
+                value={left}
+                onChange={(e) => setLeft(e.target.value)}
+                className="p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded mt-4 w-full">
+              Render Overscan Frame
+            </button>
+          </form>
         </div>
       </div>
     </div>

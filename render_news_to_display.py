@@ -4,7 +4,7 @@ from generate_image import generate_image
 from download_image import download_image
 from resize_and_crop_image import resize_and_crop_image
 from text_processing import add_title_to_image
-from display_image_on_inky import display_image_on_inky
+from display_image_on_inky import display_image_from_file_on_inky
 from utils import get_filename
 from config import DEFAULT_IMAGE_SIZE, PADDING
 
@@ -36,7 +36,7 @@ def render_news_to_display(provider="getimg"):
     add_title_to_image(resized_filename, output_filename_with_text, title, DEFAULT_IMAGE_SIZE, PADDING)
 
     # Display the image on the Inky Impression (or print a message if not on Linux)
-    display_image_on_inky(output_filename_with_text)
+    display_image_from_file_on_inky(output_filename_with_text)
 
 if __name__ == "__main__":
     render_news_to_display()

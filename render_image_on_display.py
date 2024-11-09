@@ -1,4 +1,4 @@
-from display_image_on_inky import display_image_on_inky
+from display_image_on_inky import display_image_from_file_on_inky
 from resize_and_crop_image import resize_and_crop_image
 from config import DEFAULT_IMAGE_SIZE
 
@@ -13,4 +13,4 @@ def render_image_on_display(file_path: str):
     resize_and_crop_image(file_path, resized_path, DEFAULT_IMAGE_SIZE)
 
     # Load the resized image and display it
-    display_image_on_inky(resized_path)
+    display_image_from_file_on_inky(resized_path)
