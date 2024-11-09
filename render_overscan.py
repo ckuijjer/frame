@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 from config import DEFAULT_IMAGE_SIZE
 from display_image_on_inky import display_image_on_inky
 
-def render_overscan_grid():
+def render_overscan(top: int, left: int, bottom: int, right: int):
     # Define image parameters and grid settings with vertical display for x and y coordinates
     width, height = DEFAULT_IMAGE_SIZE
     grid_spacing = 50
@@ -25,16 +25,9 @@ def render_overscan_grid():
             draw.text((x + 5, y + 5), str(x), fill="black", font=font)   # X coordinate
             draw.text((x + 5, y + 20), str(y), fill="black", font=font)  # Y coordinate, below X
 
-    # Display the image
-    display_image_on_inky(image)
-
-# def resize_and_crop_image(input_path: str, output_path: str, target_size: Tuple[int, int]):
-def render_overscan_frame(top: int, left: int, bottom: int, right: int):
-    image = Image.new("RGB", DEFAULT_IMAGE_SIZE, "white")
-    draw = ImageDraw.Draw(image)
-
     # Draw a red rectangle with a 4px border width
     border_width = 4
     draw.rectangle([(top, left), (bottom, right)], outline="red", width=border_width)
 
+    # Display the image
     display_image_on_inky(image)

@@ -1,7 +1,7 @@
 from bottle import Bottle, static_file, run, response, request
 from render_news_to_display import render_news_to_display
 from render_image_on_display import render_image_on_display
-from render_overscan import render_overscan_frame, render_overscan_grid
+from render_overscan import render_overscan
 
 app = Bottle()
 
@@ -49,18 +49,8 @@ def api_upload():
         response.status = 500
         return {"status": "error", "message": str(e)}
 
-@app.route('/api/render_overscan_grid', method='POST')
-def api_render_overscan_grid():
-    try:
-        render_overscan_grid()
-        response.content_type = 'application/json'
-        return {"status": "success", "message": "Overscan grid rendered and displayed."}
-    except Exception as e:
-        response.status = 500
-        return {"status": "error", "message": str(e)}
-
-@app.route('/api/render_overscan_frame', method='POST')
-def api_render_overscan_frame():
+@app.route('/api/render_overscan', method='POST')
+def api_render_overscan():
     data = request.json
     top = data.get('top')
     left = data.get('left')
@@ -69,7 +59,7 @@ def api_render_overscan_frame():
     try:
         render_overscan_frame(top, left, bottom, right)
         response.content_type = 'application/json'
-        return {"status": "success", "message": "Overscan frame rendered and displayed."}
+        return {"status": "success", "message": "Overscan rendered and displayed."}
     except Exception as e:
         response.status = 500
         return {"status": "error", "message": str(e)}

@@ -7,10 +7,10 @@ function App() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [top, setTop] = useState('');
-  const [left, setLeft] = useState('');
-  const [bottom, setBottom] = useState('');
-  const [right, setRight] = useState('');
+  const [top, setTop] = useState(0);
+  const [left, setLeft] = useState(0);
+  const [bottom, setBottom] = useState(480);
+  const [right, setRight] = useState(800);
 
   const generateImage = async () => {
     try {
@@ -55,24 +55,10 @@ function App() {
   };
 
   const renderOverscanGrid = async () => {
-    try {
-      const response = await fetch('/api/render_overscan_grid', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-      });
-      const result = await response.json();
-      console.log(result.message);
-    } catch (error) {
-      console.error('Error generating image:', error);
-    }
-  };
-
-  const renderOverscanFrame = async () => {
     event?.preventDefault(); // Prevent default form behavior
 
     try {
-      const response = await fetch('/api/render_overscan_grid', {
+      const response = await fetch('/api/render_overscan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ top, left, bottom, right }),
@@ -159,13 +145,7 @@ function App() {
         </div>
 
         <div className="bg-white p-8 rounded shadow-md  text-center min-h-[200px]">
-          <button
-            onClick={renderOverscanGrid}
-            className="px-4 py-2 bg-blue-500 text-white rounded w-full mb-12"
-          >
-            Render Overscan Grid
-          </button>
-          <form onSubmit={renderOverscanFrame} className="space-y-4 ">
+          <form onSubmit={renderOverscanGrid} className="space-y-4 ">
             <div className="grid grid-cols-1 gap-4">
               <input
                 type="number"
