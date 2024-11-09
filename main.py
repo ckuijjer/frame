@@ -57,7 +57,7 @@ def api_render_overscan():
     bottom = data.get('bottom')
     right = data.get('right')
     try:
-        render_overscan_frame(top, left, bottom, right)
+        render_overscan(top, left, bottom, right)
         response.content_type = 'application/json'
         return {"status": "success", "message": "Overscan rendered and displayed."}
     except Exception as e:

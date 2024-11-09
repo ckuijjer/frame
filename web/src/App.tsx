@@ -54,7 +54,7 @@ function App() {
     }
   };
 
-  const renderOverscanGrid = async () => {
+  const renderOverscan = async () => {
     event?.preventDefault(); // Prevent default form behavior
 
     try {
@@ -145,7 +145,7 @@ function App() {
         </div>
 
         <div className="bg-white p-8 rounded shadow-md  text-center min-h-[200px]">
-          <form onSubmit={renderOverscanGrid} className="space-y-4 ">
+          <form onSubmit={renderOverscan} className="space-y-4 ">
             <div className="grid grid-cols-1 gap-4">
               <input
                 type="number"
@@ -177,7 +177,7 @@ function App() {
               />
             </div>
             <button className="px-4 py-2 bg-blue-500 text-white rounded mt-4 w-full">
-              Render Overscan Frame
+              Render Overscan
             </button>
           </form>
         </div>
