@@ -1,6 +1,8 @@
 from PIL import ImageFont, ImageDraw, Image
 from typing import Tuple
 import platform
+from config import (DEFAULT_FONT_SIZE, MIN_FONT_SIZE, PREFERRED_LINES,
+                    OVERSCAN_TOP, OVERSCAN_RIGHT, OVERSCAN_BOTTOM, OVERSCAN_LEFT)
 
 def wrap_text(draw: ImageDraw.Draw, text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
     """
@@ -44,14 +46,12 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
         target_size (tuple): The target size (width, height) of the image.
         padding (int): The padding around the text.
     """
-    from config import DEFAULT_FONT_SIZE, MIN_FONT_SIZE, PREFERRED_LINES
-
     try:
         with Image.open(input_path) as img:
             draw = ImageDraw.Draw(img)
 
-            max_width = target_size[0] - 2 * padding
-            max_height = target_size[1] // 4 - 2 * padding
+            max_width = target_size[0] - OVERSCAN_LEFT - OVERSCAN_RIGHT - 2 * padding
+            max_height = target_size[1] // 4 - OVERSCAN_TOP - OVERSCAN_BOTTOM - 2 * padding
 
             font_path = get_font_path()
 
@@ -84,16 +84,16 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
                     else:
                         break
 
-            y_position = img.height - total_text_height - padding
+            y_position = img.height - total_text_height - OVERSCAN_BOTTOM - padding
             outline_width = 2
 
             for line in lines:
                 for x in range(-outline_width, outline_width + 1):
                     for y in range(-outline_width, outline_width + 1):
                         if x != 0 or y != 0:
-                            draw.text((padding + x, y_position + y), line, font=font, fill="black")
+                            draw.text((OVERSCAN_LEFT + padding + x, y_position + y), line, font=font, fill="black")
 
-                draw.text((padding, y_position), line, font=font, fill="white")
+                draw.text((OVERSCAN_LEFT + padding, y_position), line, font=font, fill="white")
                 y_position += line_height
 
             img.save(output_path)
