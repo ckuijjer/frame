@@ -53,11 +53,11 @@ def api_upload():
 def api_render_overscan():
     data = request.json
     top = data.get('top')
-    left = data.get('left')
-    bottom = data.get('bottom')
     right = data.get('right')
+    bottom = data.get('bottom')
+    left = data.get('left')
     try:
-        render_overscan(top, left, bottom, right)
+        render_overscan(top, right, bottom, left)
         response.content_type = 'application/json'
         return {"status": "success", "message": "Overscan rendered and displayed."}
     except Exception as e:

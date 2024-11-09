@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 from config import DEFAULT_IMAGE_SIZE
 from display_image_on_inky import display_image_on_inky
 
-def render_overscan(top: int, left: int, bottom: int, right: int):
+def render_overscan(top: int, right: int, bottom: int, left: int):
     # Define image parameters and grid settings with vertical display for x and y coordinates
     width, height = DEFAULT_IMAGE_SIZE
     grid_spacing = 50
