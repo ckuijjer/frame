@@ -11,6 +11,12 @@ GETIMG_API_KEY = os.getenv("GETIMG_API_KEY")
 # Default Image Size
 DEFAULT_IMAGE_SIZE = (800, 480)
 
+# Overscan Settings
+OVERSCAN_TOP = 0
+OVERSCAN_RIGHT = 0
+OVERSCAN_BOTTOM = 0
+OVERSCAN_LEFT = 0
+
 # Padding and Text Settings
 PADDING = 20
 DEFAULT_FONT_SIZE = 50

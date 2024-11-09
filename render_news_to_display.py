@@ -30,7 +30,7 @@ def render_news_to_display(provider="getimg"):
     output_filename_with_text = get_filename(title, suffix="_with_text_resized")
 
     # Resize the image
-    resize_and_crop_image(filename, resized_filename, DEFAULT_IMAGE_SIZE)
+    resize_and_crop_image(filename, resized_filename)
 
     # Add title to the resized image
     add_title_to_image(resized_filename, output_filename_with_text, title, DEFAULT_IMAGE_SIZE, PADDING)
