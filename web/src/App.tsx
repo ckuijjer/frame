@@ -151,28 +151,28 @@ function App() {
                 type="number"
                 placeholder="Top"
                 value={top}
-                onChange={(e) => setTop(e.target.value)}
+                onChange={(e) => setTop(Number(e.target.value))}
                 className="p-2 border border-gray-300 rounded"
               />
               <input
                 type="number"
                 placeholder="Right"
                 value={right}
-                onChange={(e) => setRight(e.target.value)}
+                onChange={(e) => setRight(Number(e.target.value))}
                 className="p-2 border border-gray-300 rounded"
               />
               <input
                 type="number"
                 placeholder="Bottom"
                 value={bottom}
-                onChange={(e) => setBottom(e.target.value)}
+                onChange={(e) => setBottom(Number(e.target.value))}
                 className="p-2 border border-gray-300 rounded"
               />
               <input
                 type="number"
                 placeholder="Left"
                 value={left}
-                onChange={(e) => setLeft(e.target.value)}
+                onChange={(e) => setLeft(Number(e.target.value))}
                 className="p-2 border border-gray-300 rounded"
               />
             </div>
