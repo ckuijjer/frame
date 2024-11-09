@@ -15,11 +15,14 @@ def resize_and_crop_image(input_path: str, output_path: str):
         visible_width = OVERSCAN_RIGHT - OVERSCAN_LEFT
         visible_height = OVERSCAN_BOTTOM - OVERSCAN_TOP
 
+        if visible_width <= 0 or visible_height <= 0:
+            raise ValueError("Visible width and height must be greater than zero.")
+
         with Image.open(input_path) as img:
             img = ImageOps.fit(img, (visible_width, visible_height), Image.LANCZOS, centering=(0.5, 0.5))
 
             # Create a blank (white) 800x480 background
-            background = Image.new("RGB", target_size, "white")
+            background = Image.new("RGB", DEFAULT_IMAGE_SIZE, "white")
 
             # Paste the resized image within the defined visible area
             paste_position = (OVERSCAN_LEFT, OVERSCAN_TOP)
