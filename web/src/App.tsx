@@ -69,7 +69,7 @@ function App() {
   };
 
   const renderOverscanFrame = async () => {
-    event.preventDefault(); // Prevent default form behavior
+    event?.preventDefault(); // Prevent default form behavior
 
     try {
       const response = await fetch('/api/render_overscan_grid', {
