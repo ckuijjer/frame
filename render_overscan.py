@@ -27,7 +27,7 @@ def render_overscan(top: int, right: int, bottom: int, left: int):
 
     # Draw a red rectangle with a 4px border width
     border_width = 4
-    draw.rectangle([(top, left), (bottom, right)], outline="red", width=border_width)
+    draw.rectangle([(left, top), (right, bottom)], outline="red", width=border_width)
 
     # Display the image
     display_image_on_inky(image)
