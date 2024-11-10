@@ -6,8 +6,9 @@ def render_image_on_display(file_path: str):
 
     # Define the resized file path
     file_name, file_extension = os.path.splitext(file_path)
+    print(f"file_name: {file_name} file_extension: {file_extension}")
     resized_path = f"{file_name}_resized{file_extension}"
-    
+
     print(f"Original image path: {file_path}")
     print(f"Resized image path: {resized_path}")
 
