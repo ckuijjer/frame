@@ -51,7 +51,7 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
             draw = ImageDraw.Draw(img)
 
             max_width = target_size[0] - OVERSCAN_LEFT - OVERSCAN_RIGHT - 2 * padding
-            max_height = target_size[1] // 4 - OVERSCAN_TOP - OVERSCAN_BOTTOM - 2 * padding
+            max_height = (target_size[1] - OVERSCAN_TOP - OVERSCAN_BOTTOM) // 4 - padding
 
             font_path = get_font_path()
 
@@ -62,8 +62,8 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
 
             font_size = DEFAULT_FONT_SIZE
             preferred_lines = PREFERRED_LINES
-            total_text_height = 0  # Initialize total_text_height
-            line_height = 0 # Initialize line_height
+            # total_text_height = 0  # Initialize total_text_height
+            # line_height = 0 # Initialize line_height
             while True:
                 font = ImageFont.truetype(font_path or "arial.ttf", font_size)
                 lines = wrap_text(draw, text, font, max_width)
