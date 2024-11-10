@@ -53,6 +53,8 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
             max_width = target_size[0] - OVERSCAN_LEFT - OVERSCAN_RIGHT - 2 * padding
             max_height = (target_size[1] - OVERSCAN_TOP - OVERSCAN_BOTTOM) // 4 - padding
 
+            printf(f"max_width: {max_width}, max_height: {max_height}")
+
             font_path = get_font_path()
 
             if font_path:
