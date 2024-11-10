@@ -50,8 +50,8 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
         with Image.open(input_path) as img:
             draw = ImageDraw.Draw(img)
 
-            max_width = target_size[0] - OVERSCAN_LEFT - OVERSCAN_RIGHT - 2 * padding
-            max_height = (target_size[1] - OVERSCAN_TOP - OVERSCAN_BOTTOM) // 4 - padding
+            max_width = target_size[0] - OVERSCAN_LEFT - (target_size[0] - OVERSCAN_RIGHT) - 2 * padding
+            max_height = (target_size[1] - OVERSCAN_TOP - (target_size[1] - OVERSCAN_BOTTOM)) // 4 - padding
 
             printf(f"max_width: {max_width}, max_height: {max_height}")
 
