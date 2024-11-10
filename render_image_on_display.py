@@ -3,8 +3,11 @@ from resize_and_crop_image import resize_and_crop_image
 
 def render_image_on_display(file_path: str):
     """Resize and display an image on the Inky Impression."""
+
     # Define the resized file path
-    resized_path = "./images/resized_" + file_path.split("/")[-1]
+    file_name, file_extension = os.path.splitext(file_path)
+    resized_path = f"{file_name}_resized{file_extension}"
+    
     print(f"Original image path: {file_path}")
     print(f"Resized image path: {resized_path}")
 
