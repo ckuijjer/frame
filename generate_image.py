@@ -23,6 +23,8 @@ def generate_image(title: str, summary: str, provider="openai") -> str:
     second_paragraph = paragraphs[1] if len(paragraphs) > 1 else ''
     
     prompt = f"Generate an image based on the news article titled: '{title}'. The content begins with: '{first_paragraph} {second_paragraph}'."
+
+    print(f"Generating image with prompt: |{prompt}|")
     if provider == "openai":
         return generate_image_from_openai(prompt)
     elif provider == "getimg":
