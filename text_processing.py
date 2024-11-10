@@ -88,7 +88,7 @@ def add_title_to_image(input_path: str, output_path: str, text: str, target_size
                     else:
                         break
 
-            y_position = img.height - total_text_height - OVERSCAN_BOTTOM - padding
+            y_position = OVERSCAN_BOTTOM - total_text_height - padding
             outline_width = 2
 
             for line in lines:
