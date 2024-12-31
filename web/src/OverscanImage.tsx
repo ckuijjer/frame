@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { IMAGE_WIDTH, IMAGE_HEIGHT } from './constants';
 
 export const OverscanImage = () => {
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
-  const [bottom, setBottom] = useState(480);
-  const [right, setRight] = useState(800);
+  const [bottom, setBottom] = useState(IMAGE_HEIGHT);
+  const [right, setRight] = useState(IMAGE_WIDTH);
 
   const renderOverscan = async () => {
     event?.preventDefault(); // Prevent default form behavior
