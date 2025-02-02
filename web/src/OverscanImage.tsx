@@ -24,36 +24,38 @@ export const OverscanImage = () => {
   };
 
   return (
-    <form onSubmit={renderOverscan} className="space-y-4 ">
-      <div className="grid grid-cols-1 gap-4">
-        <input
-          type="number"
-          placeholder="Top"
-          value={top}
-          onChange={(e) => setTop(Number(e.target.value))}
-          className="p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="number"
-          placeholder="Right"
-          value={right}
-          onChange={(e) => setRight(Number(e.target.value))}
-          className="p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="number"
-          placeholder="Bottom"
-          value={bottom}
-          onChange={(e) => setBottom(Number(e.target.value))}
-          className="p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="number"
-          placeholder="Left"
-          value={left}
-          onChange={(e) => setLeft(Number(e.target.value))}
-          className="p-2 border border-gray-300 rounded"
-        />
+    <form onSubmit={renderOverscan} className="space-y-4 flex flex-col flex-1">
+      <div className="flex flex-col flex-1">
+        <div className="grid grid-cols-1 gap-4">
+          <input
+            type="number"
+            placeholder="Top"
+            value={top}
+            onChange={(e) => setTop(Number(e.target.value))}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="number"
+            placeholder="Right"
+            value={right}
+            onChange={(e) => setRight(Number(e.target.value))}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="number"
+            placeholder="Bottom"
+            value={bottom}
+            onChange={(e) => setBottom(Number(e.target.value))}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="number"
+            placeholder="Left"
+            value={left}
+            onChange={(e) => setLeft(Number(e.target.value))}
+            className="p-2 border border-gray-300 rounded"
+          />
+        </div>
       </div>
       <button className="px-4 py-2 bg-blue-500 text-white rounded mt-4 w-full">
         Render Overscan

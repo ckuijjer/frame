@@ -81,6 +81,12 @@ sudo apt install libopenblas-dev fonts-roboto nodejs npm
    pnpm build
    ```
 
+   or to only warn for TypeScript errors:
+
+   ```bash
+   pnpm build:warn
+   ```
+
 Or as a all in once command:
 
 ```bash
@@ -93,7 +99,7 @@ touch .env
 cd web
 sudo npm install -g pnpm
 pnpm install
-pnpm build
+pnpm build:warn
 ```
 
 Just remember to add your API keys to the `.env` file.

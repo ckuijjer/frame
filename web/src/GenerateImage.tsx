@@ -19,7 +19,7 @@ export const GenerateImage = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center mb-4">
+      <div className="flex flex-col flex-1 items-center mb-4">
         <label className="mb-2">
           <input
             type="radio"
