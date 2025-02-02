@@ -12,11 +12,11 @@ function App() {
       </h2>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="bg-white p-8 rounded shadow-md  ext-center min-h-[200px]">
+        <div className="bg-white p-8 rounded shadow-md text-center min-h-[200px]">
           <GenerateImage />
         </div>
 
-        <div className="bg-white p-8 rounded shadow-md text-center min-h-[200px] flex flex-col">
+        <div className="bg-white p-8 rounded shadow-md text-center min-h-[400px] flex flex-col">
           <UploadImage />
         </div>
 
