@@ -1,15 +1,28 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Cropper from 'react-easy-crop';
+import Cropper, { Area } from 'react-easy-crop';
 import axios from 'axios';
 import { IMAGE_HEIGHT, IMAGE_WIDTH } from './constants';
 
-const getCroppedImage = async ({ imageSrc, croppedAreaPixels, rotation }) => {
+type GetCroppedImageArgs = {
+  imageSrc: string;
+  croppedAreaPixels: Area;
+  rotation: number;
+};
+
+const getCroppedImage = async ({
+  imageSrc,
+  croppedAreaPixels,
+  rotation,
+}: GetCroppedImageArgs): Promise<File> => {
   console.log({ imageSrc, croppedAreaPixels, rotation });
 
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('Could not get canvas 2D context');
+  }
 
   canvas.width = croppedAreaPixels.width;
   canvas.height = croppedAreaPixels.height;
@@ -32,9 +45,13 @@ const getCroppedImage = async ({ imageSrc, croppedAreaPixels, rotation }) => {
   );
 
   // Convert canvas content to a Blob or File
-  return new Promise((resolve) => {
+  return new Promise<File>((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
+        if (!blob) {
+          reject(new Error('Canvas toBlob() returned null'));
+          return;
+        }
         const file = new File([blob], 'cropped-image.jpg', {
           type: 'image/jpeg',
         });
@@ -46,7 +63,7 @@ const getCroppedImage = async ({ imageSrc, croppedAreaPixels, rotation }) => {
   });
 };
 
-function createImage(url) {
+function createImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.crossOrigin = 'anonymous'; // For CORS issues
@@ -59,12 +76,12 @@ function createImage(url) {
 export const UploadImage = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const [imageSrc, setImageSrc] = useState(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setIsUploading(true); // Set upload in progress
@@ -72,7 +89,8 @@ export const UploadImage = () => {
     const file = acceptedFiles[0];
     const reader = new FileReader();
     reader.onload = () => {
-      setImageSrc(reader.result);
+      // readAsDataURL below always yields a string result, never ArrayBuffer
+      setImageSrc(reader.result as string);
 
       setUploadProgress(0); // Reset progress after upload
       setIsUploading(false); // Reset upload state
@@ -87,6 +105,10 @@ export const UploadImage = () => {
   }, []);
 
   const onUpload = async () => {
+    if (!imageSrc || !croppedAreaPixels) {
+      return;
+    }
+
     const croppedImage = await getCroppedImage({
       imageSrc,
       croppedAreaPixels,
@@ -137,17 +159,9 @@ export const UploadImage = () => {
     disabled: isUploading,
   });
 
-  const onCropComplete = useCallback((_, croppedAreaPixels) => {
+  const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
-
-  const rotate90Clockwise = () => {
-    setRotation((rotation + 90) % 360);
-  };
-
-  const rotate90CounterClockwise = () => {
-    setRotation((rotation - 90 + 360) % 360);
-  };
 
   const resetImage = () => {
     setCrop({ x: 0, y: 0 });
@@ -156,16 +170,6 @@ export const UploadImage = () => {
     setCroppedAreaPixels(null);
     setImageSrc(null);
   };
-
-  function createImage(url) {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-      image.crossOrigin = 'anonymous'; // For CORS issues
-      image.onload = () => resolve(image);
-      image.onerror = (error) => reject(error);
-      image.src = url;
-    });
-  }
 
   return (
     <>
@@ -210,18 +214,6 @@ export const UploadImage = () => {
             >
               ❌
             </button>
-            {/* <button
-              onClick={rotate90CounterClockwise}
-              className="px-4 py-2 bg-gray-200 rounded mr-2"
-            >
-              ↪️
-            </button>
-            <button
-              onClick={rotate90Clockwise}
-              className="px-4 py-2 bg-gray-200 rounded mr-4"
-            >
-              ↩️
-            </button> */}
             <button
               onClick={onUpload}
               className="px-4 py-2 bg-blue-500 text-white rounded flex-1"
