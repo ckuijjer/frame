@@ -1,7 +1,9 @@
+import os
 from bottle import Bottle, static_file, run, response, request
 from render_news_to_display import render_news_to_display
 from render_image_on_display import render_image_on_display
 from render_overscan import render_overscan
+from display_image_on_inky import CURRENT_IMAGE_PATH
 
 app = Bottle()
 
@@ -48,6 +50,13 @@ def api_upload():
     except Exception as e:
         response.status = 500
         return {"status": "error", "message": str(e)}
+
+# Whatever's actually on the physical Inky display right now (updated by
+# display_image_on_inky() on every render/upload/overscan) - 404s if
+# nothing's been displayed yet since the file doesn't exist until then.
+@app.route('/api/current_image')
+def api_current_image():
+    return static_file(os.path.basename(CURRENT_IMAGE_PATH), root=os.path.dirname(CURRENT_IMAGE_PATH))
 
 @app.route('/api/render_overscan', method='POST')
 def api_render_overscan():

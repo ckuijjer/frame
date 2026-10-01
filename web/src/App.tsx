@@ -1,6 +1,7 @@
 import { GenerateImage } from './GenerateImage';
 import { UploadImage } from './UploadImage';
 import { OverscanImage } from './OverscanImage';
+import { CurrentImage } from './CurrentImage';
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
 
         <div className="bg-white p-8 rounded shadow-md text-center min-h-[200px] flex flex-col">
           <OverscanImage />
+        </div>
+
+        <div className="bg-white p-8 rounded shadow-md text-center min-h-[400px] flex flex-col">
+          <CurrentImage />
         </div>
       </div>
     </div>

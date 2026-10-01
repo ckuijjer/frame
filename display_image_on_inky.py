@@ -2,6 +2,14 @@ import platform
 import os
 from PIL import Image, ImageOps, ImageFile
 
+# Whatever actually lands on the physical display gets saved here too, so
+# the frontend's "current picture" card has something to show - saved in
+# display_image_on_inky() itself (not the file-path wrapper) since that's
+# the one choke point every render path (news, upload, overscan) goes
+# through, and it's the already-resized/padded image, i.e. exactly what's
+# on screen, not whatever source file/aspect ratio was passed in.
+CURRENT_IMAGE_PATH = os.path.join("images", "current.png")
+
 def display_image_from_file_on_inky(image_path: str):
     """
     Display an image on the Inky Impression if the OS is Linux.
@@ -37,9 +45,12 @@ def display_image_on_inky(image: Image):
 
     # Resize the image to fit the Inky display's resolution
     resized_image = ImageOps.pad(image, inky.resolution, method=RESAMPLING, color=BORDER_COLOR)
-    
+
     # Set image on the Inky display
     inky.set_image(resized_image, saturation=SATURATION)
     inky.set_border(BORDER_COLOR)
     inky.show()
+
+    os.makedirs(os.path.dirname(CURRENT_IMAGE_PATH), exist_ok=True)
+    resized_image.save(CURRENT_IMAGE_PATH)
 
