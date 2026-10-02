@@ -1,0 +1,7 @@
+{
+  "name": "frame",
+  "private": true,
+  "scripts": {
+    "upgrade:web": "pnpm --dir web run upgrade"
+  }
+}
