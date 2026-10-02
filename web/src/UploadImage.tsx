@@ -4,6 +4,16 @@ import Cropper, { Area } from 'react-easy-crop';
 import axios from 'axios';
 import { IMAGE_HEIGHT, IMAGE_WIDTH } from './constants';
 
+// Neither Chrome nor Firefox can decode HEIC/HEIF (iPhones' default photo
+// format) into an <img>/canvas at all, so the crop preview and canvas-based
+// cropping below would just silently fail on one - converted to JPEG here
+// first. file.type is unreliable for HEIC (often "" depending on OS/browser),
+// so the extension is checked too.
+const isHeic = (file: File) =>
+  file.type === 'image/heic' ||
+  file.type === 'image/heif' ||
+  /\.(heic|heif)$/i.test(file.name);
+
 type GetCroppedImageArgs = {
   imageSrc: string;
   croppedAreaPixels: Area;
@@ -73,9 +83,27 @@ function createImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
+const readFileAsDataURL = (
+  file: Blob,
+  onProgress: (percent: number) => void,
+): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    // readAsDataURL below always yields a string result, never ArrayBuffer
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.onprogress = (event) => {
+      if (event.lengthComputable) {
+        onProgress(Math.round((event.loaded * 100) / event.total));
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
 export const UploadImage = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -84,24 +112,42 @@ export const UploadImage = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setIsUploading(true); // Set upload in progress
-
     const file = acceptedFiles[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      // readAsDataURL below always yields a string result, never ArrayBuffer
-      setImageSrc(reader.result as string);
 
-      setUploadProgress(0); // Reset progress after upload
-      setIsUploading(false); // Reset upload state
-    };
-    reader.readAsDataURL(file);
-    reader.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const progress = Math.round((event.loaded * 100) / event.total);
-        setUploadProgress(progress);
+    (async () => {
+      let fileToRead: File | Blob = file;
+
+      if (isHeic(file)) {
+        setIsConverting(true);
+        try {
+          // Dynamically imported: heic2any bundles a WASM HEIC decoder
+          // (~1.3MB) that most visitors, who never drop a HEIC file, would
+          // otherwise download on every page load for nothing.
+          const { default: heic2any } = await import('heic2any');
+          const converted = await heic2any({
+            blob: file,
+            toType: 'image/jpeg',
+            quality: 0.92,
+          });
+          fileToRead = Array.isArray(converted) ? converted[0] : converted;
+        } catch (error) {
+          console.error('Error converting HEIC image:', error);
+          setIsConverting(false);
+          return;
+        }
+        setIsConverting(false);
       }
-    };
+
+      setIsUploading(true); // Set upload in progress
+      try {
+        setImageSrc(await readFileAsDataURL(fileToRead, setUploadProgress));
+      } catch (error) {
+        console.error('Error reading image:', error);
+      } finally {
+        setUploadProgress(0); // Reset progress after upload
+        setIsUploading(false); // Reset upload state
+      }
+    })();
   }, []);
 
   const onUpload = async () => {
@@ -154,9 +200,11 @@ export const UploadImage = () => {
     }
   };
 
+  const isBusy = isUploading || isConverting;
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    disabled: isUploading,
+    disabled: isBusy,
   });
 
   const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
@@ -177,17 +225,19 @@ export const UploadImage = () => {
         <div
           {...getRootProps()}
           className={`border-2 border-dashed p-8 rounded cursor-pointer flex-1 flex items-center justify-center ${
-            isUploading ? 'opacity-50 cursor-not-allowed' : ''
+            isBusy ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
-          <input {...getInputProps()} disabled={isUploading} />
+          <input {...getInputProps()} disabled={isBusy} />
           {isDragActive ? (
             <p>Drop the image here...</p>
           ) : (
             <p>
-              {isUploading
-                ? 'Uploading...'
-                : 'Drag and drop an image here, or click to select'}
+              {isConverting
+                ? 'Converting HEIC image...'
+                : isUploading
+                  ? 'Uploading...'
+                  : 'Drag and drop an image here, or click to select'}
             </p>
           )}
         </div>
